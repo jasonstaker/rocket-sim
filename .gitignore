@@ -1,0 +1,24 @@
+# CMake build directories
+/build/
+/out/
+/ignore/
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python compilation and virtual environments
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Sim Outputs (Keep configs, ignore run data dumps)
+*.csv
+.clang-format
