@@ -56,7 +56,10 @@ target_link_libraries(
 
 # Test binary
 enable_testing()
-add_executable(rocket_sim_tests tests/sim_tests.cpp)
+add_executable(
+  rocket_sim_tests
+    tests/rk4_tests.cpp
+)
 
 target_link_libraries(
   rocket_sim_tests
