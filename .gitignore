@@ -21,4 +21,3 @@ Thumbs.db
 
 # Sim Outputs (Keep configs, ignore run data dumps)
 *.csv
-.clang-format
