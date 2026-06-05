@@ -28,30 +28,23 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Main library
-add_library(rocket_sim_lib INTERFACE)
-target_include_directories(
-  rocket_sim_lib
-  INTERFACE
-    include
+add_library(rocket_sim_lib 
+  src/vehicle/motor.cpp
 )
-
-target_link_libraries(
-  rocket_sim_lib 
-  INTERFACE 
-    Eigen3::Eigen
-)
+target_include_directories(rocket_sim_lib PUBLIC include)
+target_link_libraries(rocket_sim_lib PUBLIC Eigen3::Eigen)
 
 
 # Main executable
-add_executable(rocket_sim
-  src/main.cpp 
-)
+#add_executable(rocket_sim
+#  src/main.cpp 
+#)
 
-target_link_libraries(
-  rocket_sim
-  PRIVATE
-    rocket_sim_lib
-)
+#target_link_libraries(
+#  rocket_sim
+#  PRIVATE
+#    rocket_sim_lib
+#)
 
 
 # Test binary
@@ -59,14 +52,13 @@ enable_testing()
 add_executable(
   rocket_sim_tests
     tests/rk4_tests.cpp
+    tests/motor_tests.cpp
 )
-
 target_link_libraries(
   rocket_sim_tests
   PRIVATE 
     rocket_sim_lib
     GTest::gtest_main
 )
-
 include(GoogleTest)
 gtest_discover_tests(rocket_sim_tests)
