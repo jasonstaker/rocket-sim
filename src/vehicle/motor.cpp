@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace vehicle {
+
 Motor::Motor(const std::string& eng_file_path) {
   std::ifstream file(eng_file_path);
 

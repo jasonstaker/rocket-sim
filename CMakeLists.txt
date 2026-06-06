@@ -10,9 +10,9 @@ include(FetchContent)
 
 # Eigen
 FetchContent_Declare(
-  Eigen
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG 3.4.0
+        Eigen
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG 3.4.0
 )
 set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
 set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
@@ -20,16 +20,17 @@ FetchContent_MakeAvailable(Eigen)
 
 # GoogleTest
 FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG v1.14.0
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.14.0
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Main library
-add_library(rocket_sim_lib 
-  src/vehicle/motor.cpp
+add_library(rocket_sim_lib
+        src/vehicle/motor.cpp
+        src/dynamics/environment.cpp
 )
 target_include_directories(rocket_sim_lib PUBLIC include)
 target_link_libraries(rocket_sim_lib PUBLIC Eigen3::Eigen)
@@ -50,15 +51,16 @@ target_link_libraries(rocket_sim_lib PUBLIC Eigen3::Eigen)
 # Test binary
 enable_testing()
 add_executable(
-  rocket_sim_tests
-    tests/rk4_tests.cpp
-    tests/motor_tests.cpp
+        rocket_sim_tests
+        tests/rk4_tests.cpp
+        tests/motor_tests.cpp
+        tests/environment_tests.cpp
 )
 target_link_libraries(
-  rocket_sim_tests
-  PRIVATE 
-    rocket_sim_lib
-    GTest::gtest_main
+        rocket_sim_tests
+        PRIVATE
+        rocket_sim_lib
+        GTest::gtest_main
 )
 include(GoogleTest)
 gtest_discover_tests(rocket_sim_tests)
