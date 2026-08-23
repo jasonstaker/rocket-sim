@@ -36,16 +36,16 @@ target_include_directories(rocket_sim_lib PUBLIC include)
 target_link_libraries(rocket_sim_lib PUBLIC Eigen3::Eigen)
 
 
-# Main executable
-#add_executable(rocket_sim
-#  src/main.cpp 
-#)
 
-#target_link_libraries(
-#  rocket_sim
-#  PRIVATE
-#    rocket_sim_lib
-#)
+add_executable(3_dof_sim
+  src/sim/3_dof_sim.cpp 
+)
+
+target_link_libraries(
+ 3_dof_sim
+  PRIVATE
+    rocket_sim_lib
+)
 
 
 # Test binary
