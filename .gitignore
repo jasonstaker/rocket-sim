@@ -21,3 +21,12 @@ Thumbs.db
 
 # Sim Outputs (Keep configs, ignore run data dumps)
 *.csv
+
+# Visual Studio
+.vs/
+CMakeUserPresets.json
+compile_commands.json
+
+# Planning / personal documents - never publish
+*.docx
+ROCKET_PROJECT_DOSSIER.md
