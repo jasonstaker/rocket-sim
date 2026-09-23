@@ -1,5 +1,8 @@
 #include <Eigen/Dense>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <string>
 
 #include "dynamics/environment.hpp"
 #include "math/rk4_integrator.hpp"
@@ -31,7 +34,18 @@ Eigen::Vector<double, 6> state_derivative(const Eigen::Vector<double, 6>& state,
   return derivative;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+  const std::string output_path = (argc > 1) ? argv[1] : "flight.csv";
+
+  std::ofstream csv(output_path);
+  if (!csv) {
+    std::cerr << "error: could not open '" << output_path << "' for writing\n";
+    return 1;
+  }
+
+  csv << "t_s,altitude_m,velocity_ms\n";
+  csv << std::fixed << std::setprecision(6);
+
   Eigen::Vector<double, 6> state(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
   double t = 0.0;
@@ -40,14 +54,21 @@ int main() {
   Eigen::Vector<double, 6> prev_state;
 
   do {
-    std::cout << state[Z] << ", " << state[dZ] << "\n";
+    csv << t << "," << state[Z] << "," << state[dZ] << "\n";
     prev_state = state;
     state = math::rk4Step(state, t, dt, state_derivative);
     t += dt;
   } while (state[dZ] > 0.0);
 
-  std::cout << "\n" << t << "\n";
-  std::cout << ((state[Z] < prev_state[Z]) ? prev_state[Z] : state[Z]) << "\n";
+  // the loop exits after the step that crossed apogee, so the crossing state
+  // itself is still unwritten; emit it so the trace ends at apogee
+  csv << t << "," << state[Z] << "," << state[dZ] << "\n";
+
+  // diagnostics go to stderr to keep stdout/the data file uncontaminated
+  std::cerr << "apogee: "
+            << ((state[Z] < prev_state[Z]) ? prev_state[Z] : state[Z])
+            << " m at t = " << t << " s\n";
+  std::cerr << "wrote " << output_path << "\n";
 
   return 0;
 }
