@@ -41,37 +41,22 @@ def main():
 
     time, altitude, velocity = read_trace(args.csv_path)
 
+    # the trajectory is unvalidated (no closed-form apogee check yet), so the
+    # figure marks apogee and peak velocity without printing their values
     apogee = max(altitude)
-    apogee_t = time[altitude.index(apogee)]
     # velocity peaks where thrust has decayed to vehicle weight, which for a
     # motor with a tail-off comes a little before true burnout
-    peak_v = max(velocity)
-    peak_t = time[velocity.index(peak_v)]
+    peak_t = time[velocity.index(max(velocity))]
 
     fig, (top, bottom) = plt.subplots(2, 1, sharex=True, figsize=(8, 6.5))
 
     top.plot(time, altitude, color=ASCENT, linewidth=1.6)
     top.axhline(apogee, color=ACCENT, linestyle="--", linewidth=1.0)
-    top.annotate(
-        f"apogee {apogee:,.0f} m at {apogee_t:.1f} s",
-        xy=(apogee_t, apogee),
-        xytext=(-10, -18),
-        textcoords="offset points",
-        ha="right",
-        color=ACCENT,
-    )
     top.set_ylabel("Altitude (m)")
     top.set_title("3-DOF vertical launch, AeroTech J415W (drag-free)")
 
     bottom.plot(time, velocity, color=ASCENT, linewidth=1.6)
     bottom.axvline(peak_t, color=ACCENT, linestyle=":", linewidth=1.0)
-    bottom.annotate(
-        f"peak velocity {peak_v:.0f} m/s at {peak_t:.2f} s",
-        xy=(peak_t, peak_v),
-        xytext=(8, -4),
-        textcoords="offset points",
-        color=ACCENT,
-    )
     bottom.axhline(0.0, color="#999999", linewidth=0.8)
     bottom.set_ylabel("Vertical velocity (m/s)")
     bottom.set_xlabel("Time (s)")
